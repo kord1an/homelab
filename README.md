@@ -6,7 +6,7 @@ Documentation and Infrastructure as Code for my home lab environment focused on 
 
 - **Runbooks** - operational procedures (deployment, troubleshooting, recovery)
 - **Inventory** - hardware, network, and VM documentation
-- **Stacks** - Docker Swarm stack definitions
+- **Swarm** - Docker Swarm stack definitions
 - **Ansible** - automation playbooks
 - **Knowledge base** - design decisions, how-tos, references
 
