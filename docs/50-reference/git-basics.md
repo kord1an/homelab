@@ -22,38 +22,43 @@ Typical flow for changes:
 1. Edit files
 2. Check status
 
-    git status
+		git status
 
 3. Stage files
 
-	git add <file> # single file
-	git add . # everything (careful!)
+		git add <file> # single file
+		git add . # everything (careful!)
 
 4. Commit with message
 
-	git commit -m "type: short description"
+		git commit -m "type: short description"
 
 5. Push to remote
 
-	git push
+		git push
 
 ## Useful commands
 
 Some useful commands:
 
 Show history (short)
+
 	git log --oneline --graph --decorate
 
 See what will be committed (staged changes)
+
 	git diff --staged
 
 See local changes (not staged)
+
 	git diff
 
 Undo last commit, keep changes staged
+
 	git reset --soft HEAD~1
 
 Undo staging (keep changes in files)
+
 	git reset HEAD <file>
 
 ## Safety reminders
