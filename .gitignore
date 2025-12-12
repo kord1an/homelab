@@ -1,0 +1,15 @@
+# Secrets - NEVER commit
+.env
+secrets/
+*.key
+*.pem
+production/
+
+# Ansible sensitive
+ansible/inventory/hosts.yml
+*.retry
+.vault_pass
+
+# Misc
+.DS_Store
+*.log
