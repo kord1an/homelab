@@ -22,7 +22,7 @@ The layout follows a convention:
 ## Naming Convention
 
 - **Service name** (lowercase): `traefik`, `gitea`, `authentik`, `vaultwarden`, `jellyfin`.
-- **Slot number** (prod-N): `prod-1`, `prod-2`.
+- **Slot number** (prod-N): `prod-1`, `prod-2` and `demo-1`, `demo-2`.
 - **Example paths:**
 
         /srv/swarm/prod/traefik/traefik-prod-1/
