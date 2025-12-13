@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  whoami:
+    image: traefik/whoami
+    deploy:
+      replicas: 2
+    ports:
+      - "8000:80"
