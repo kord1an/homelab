@@ -12,13 +12,14 @@
 
 - NFS server: Proxmox host (storage node)
 - Export path (ZFS dataset): `/tank/docker-swarm-data`
-- Mount point on Swarm nodes: `/srv/swarm-data`
+- Mount point on Swarm nodes: `/srv/swarm`
 - Notes: shared persistent data for Swarm stacks via NFS
 
 ## Swarm overlay networks
 
 - `traefik-proxy` – overlay network for Traefik ↔ docker-socket-proxy  
-- `traefik-apps` – overlay network for Traefik ↔ HTTP services  
+- `traefik-prod-apps` – overlay network for Traefik ↔ HTTP production services  
+- `traefik-demo-apps` – overlay network for Traefik ↔ HTTP demo services  
 - (add more here later if needed)
 
 ## Last update
