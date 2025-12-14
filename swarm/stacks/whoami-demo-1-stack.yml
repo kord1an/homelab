@@ -1,9 +1,13 @@
+# Example Swarm demo stack (whoami)
+
 version: "3.9"
 
 services:
   whoami:
     image: traefik/whoami
     deploy:
-      replicas: 2
+      replicas: 1
     ports:
       - "8000:80"
+    volumes:
+      - ./data:/data
