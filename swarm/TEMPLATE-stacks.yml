@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  <service-name>:
+    image: ...
+    environment:
+    secrets:
+    configs:
+    volumes:
+    command:
+    networks:
+    deploy:
+      mode:
+      replicas:
+      placement:
+        constraints:
+      restart_policy:
+      labels:
+
+networks:
+secrets:
