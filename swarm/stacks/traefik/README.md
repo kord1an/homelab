@@ -24,11 +24,7 @@ The stack is parameterized via a `.env` file and deployed using `deploy.sh`.
 
 ## Usage
 
-1. **Clone or copy this directory** to your Swarm manager node:
-   ```
-   git clone <your-repo-url>.git
-   cd swarm/stacks/traefik
-   ```
+1. **Copy this directory** to your Swarm manager node.
 
 2. **Create the `.env` file** based on the template:
    ```
