@@ -1,0 +1,101 @@
+# Example Swarm prod stack (traefik)
+# This file is a TEMPLATE. Replace placeholder values (UID:GID, ./data, ports) before using it
+# in a real environment. It is intended for prod usage.
+
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v3.6.0
+    # Main reverse proxy and entrypoint for all homelab HTTP/HTTPS traffic.
+
+    ports:
+      # HTTP (temporary test port – switched to 80 in cutover phase)
+      - "${TRAEFIK_HTTP_PORT}:80"
+      # HTTPS (temporary test port – switched to 443 in cutover phase)
+      - "${TRAEFIK_HTTPS_PORT}:443"
+      # Traefik dashboard (only accessible from admin network / VPN)
+      - "${TRAEFIK_DASHBOARD_PORT}:8080"
+
+
+    environment:
+      # Timezone for logs and certificates.
+      - TZ=${TRAEFIK_TZ}
+
+      # Cloudflare DNS API token is provided via Docker Swarm secret.
+      # Traefik reads it from this file when solving DNS-01 challenges.
+      - CF_DNS_API_TOKEN_FILE=/run/secrets/${TRAEFIK_CF_SECRET_NAME}
+
+      # Contact e‑mail address for Let's Encrypt / ACME.
+      - CF_API_EMAIL=${TRAEFIK_ACME_EMAIL}
+
+    secrets:
+      # Cloudflare API token stored as Swarm secret (name provided via .env).
+      - ${TRAEFIK_CF_SECRET_NAME}
+
+    volumes:
+      # Read-only access to Docker API for service discovery.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      # Persistent ACME storage (Let's Encrypt certificates).
+      # Must be on shared or stable storage on the pinned node.
+      - ${TRAEFIK_DATA_ROOT}/acme:/etc/traefik/acme
+
+      # Dynamic configuration files (middlewares, routers, etc.).
+      - ${TRAEFIK_DATA_ROOT}/config:/etc/traefik/dynamic:ro
+
+    command:
+      # Enable Traefik dashboard (could be protected in the future via Auth).
+      - "--api.dashboard=true"
+
+      # Docker provider in Swarm mode – discover services via labels.
+      - "--providers.docker=true"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+
+      # File provider for additional dynamic configuration.
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
+
+      # EntryPoints – HTTP and HTTPS.
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+
+      # Redirect all HTTP traffic to HTTPS.
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+
+      # Let's Encrypt / ACME via Cloudflare DNS challenge.
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.cloudflare.acme.email=${TRAEFIK_ACME_EMAIL}"
+      - "--certificatesresolvers.cloudflare.acme.storage=/etc/traefik/acme/acme.json"
+
+    # Single shared overlay network for all apps behind Traefik.
+    networks:
+      - traefik-public
+
+    deploy:
+      mode: replicated
+      # Single instance to avoid ACME/cert sync issues.
+      replicas: 1
+      placement:
+        constraints:
+          # Pin Traefik to a specific node - adjust hostname in .env.
+          - node.hostname == ${TRAEFIK_NODE_HOSTNAME}
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.traefik-dashboard.rule=Host(`${TRAEFIK_DASHBOARD_HOST}`)"
+        - "traefik.http.routers.traefik-dashboard.entrypoints=websecure"
+        - "traefik.http.routers.traefik-dashboard.tls.certresolver=cloudflare"
+        - "traefik.http.routers.traefik-dashboard.service=api@internal"
+
+networks:
+  traefik-public:
+    external: true
+
+secrets:
+  ${TRAEFIK_CF_SECRET_NAME}:
+    external: true
