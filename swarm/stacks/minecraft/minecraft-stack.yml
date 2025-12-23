@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  minecraft:
+    image: itzg/minecraft-server:2025.12.0  # version 1.21.4+
+    user: "UID:GID"   # UID:GID
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]  # manager node
+      resources:
+        limits:
+          memory: 6G
+    ports:
+      - "25565:25565/tcp"  # MC port
+      - "25575:25575/tcp"     # RCON (optional)
+    environment:
+      EULA: "TRUE"          # it is a must!
+      TYPE: "VANILLA"           # or PAPER/FORGE/FABRIC
+      VERSION: "LATEST"     # auto 1.21.4+
+      MEMORY: "4G"          # limit RAM
+      DIFFICULTY: "normal"
+      MAX_PLAYERS: "5"
+      SPAWN_PROTECTION: "0"
+      OVERRIDE_SERVER_PROPERTIES: "true"  # force config
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: "password"      # change for your own!
+      RCON_PORT: "25575"
+      # Since it is migrated from LXC:
+      LEVEL_TYPE: "DEFAULT"
+      SEED: ""  # empty = random world
+      ONLINE_MODE: "false" # non-premium
+    volumes:
+      - ./minecraft-data:/data  # persistent volume - path to shared storage for swarm
+#    networks:
+#      - traefik-network-apps #optional
+    hostname: "minecraft-{{.Node.Hostname}}"
+
+#networks:
+#  traefik-network-apps:
+#    external: true  # optional: docker network can be created for internal docker swarm communication traefik-network-apps
