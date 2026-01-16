@@ -14,3 +14,10 @@ Storage architecture is designed to balance performance (IOPS) for VMs and capac
 *   **Filesystem:** ZFS on Linux (ZoL) for all data pools; EXT4 for the dedicated backup drive (Passthrough).
 *   **Optimization:** `ashift=12` enforced for all SSD pools; `compression=lz4` enabled globally.
 *   **Sharing:** Datasets from `tank` and `hot` are exported via **NFS** to the secondary node (PVE2) to facilitate shared storage access.
+
+**PBS Datastore:**
+  - **Model:** Samsung SSD 870 QVO 1TB
+  - **Type:** ZFS (Host) -> VirtIO SCSI (Guest) -> ZFS (Guest)
+  - **Size:** 800 GiB allocated (Physical: ~931 GB)
+  - **Mount:** Passed to PBS VM as `scsi0`
+  - **Purpose:** Dedicated storage for Proxmox Backup Server (`datastore0`)

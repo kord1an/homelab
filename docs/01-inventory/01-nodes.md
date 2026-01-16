@@ -14,7 +14,7 @@ The primary workhorse of the homelab, handling heavy workloads (media, storage, 
   - **Boot/System:** 2x 512GB NVMe (ZFS Mirror `rpool`)
   - **Hot Data:** 2x 512GB NVMe (ZFS Mirror `hot`)
   - **Bulk Storage:** 5x 1TB HDD (ZFS RAIDZ1 `tank`)
-  - **Backup Cache:** 1x TB SSD (ZFS Single `pbs-store`)
+  - **Backup Storage:** 1x TB SSD (ZFS Single `pbs-store`)
 - **Power:** Chieftec 350W GPA-350S (Mod: SPC Sigma Pro Fan Swap for silence)
 - **Case:** Midi Tower (Generic)
 
