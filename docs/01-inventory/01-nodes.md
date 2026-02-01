@@ -5,7 +5,7 @@ The primary workhorse of the homelab, handling heavy workloads (media, storage, 
 
 ### Hardware Specs
 - **CPU:** Intel Core i5-11400 (6C/12T, Rocket Lake, iGPU UHD 730)
-- **RAM:** 64GB DDR4 (2x 32GB 3200MHz, Non-ECC UDIMM)
+- **RAM:** 64GB DDR4 (2x 32GB 3000MHz, Non-ECC UDIMM)
 - **Motherboard:** ASRock B560M-PRO4 (mATX)
 - **Networking:**
   - `vmbr0` (LAN): 1GbE Intel I219-V (Onboard) → Management/VM Traffic
@@ -28,28 +28,37 @@ The primary workhorse of the homelab, handling heavy workloads (media, storage, 
 
 ***
 
-## 🔵 PVE2 (Edge Node)
-A low-power secondary node providing high availability for critical services (DNS, Routing) and acting as a replication target.
+## 🔵 PVE2 (Edge Node / Core Guardian)
+A dedicated, low-power node designed as an independent "Guardian" for critical infrastructure. It hosts essential services that must remain operational even during a complete PVE1 failure, ensuring network access, monitoring, and remote management capabilities.
 
 ### Hardware Specs
-- **CPU:** Intel N6005 (4C/4T, Jasper Lake, low TDP)
+- **CPU:** Intel N6005 (4C/4T, Jasper Lake, efficient low TDP)
 - **RAM:** 16GB DDR4 SODIMM
-- **Form Factor:** Mini PC / NUC
+- **Form Factor:** Mini PC
 - **Networking:**
-  - `vmbr0` (LAN): 1GbE Realtek RTL8111 (Onboard) → Management/VM Traffic
-  - `vmbr1` (Direct): 1GbE Realtek RTL8111 (M.2 Ethernet Adapter) → Storage Backbone (10.10.10.2)
+  - `vmbr0` (LAN): 1GbE Realtek RTL8111 (Onboard) → Management & VM Traffic
+  - `vmbr1` (Direct): 1GbE Realtek M.2 (Secondary) → Cluster Heartbeat (10.10.10.2)
 - **Storage Configuration:**
-  - **Boot/System:** 1x 256GB NVMe (ZFS Single `rpool`)
-  - **Shared Storage:** Mounts NFS `/hot/shared` from PVE1 via Direct Link
-- **Power:** 12V DC External Brick
+  - **Boot/System:** 256GB NVMe (ZFS Single `rpool`)
+  - **Local Storage:** Used for "Core" Docker volumes (no dependency on PVE1 NFS for critical apps)
+- **Power:** 19V DC External Brick
 
 ### Roles & Services
-- **Cluster Role:** Vote 1/2 (Secondary Compute / Failover Target)
-- **Key Services:**
-  - AdGuard Home / Pi-hole (Primary DNS)
-  - Omada Controller (LXC)
-  - Traefik Ingress (Replica)
-  - ZFS Replication Target (Warm Standby for PVE1 VMs)
+- **Cluster Role:** Vote 1/2 (Quorum member & Independent Watchdog)
+- **Primary Role:** "Life Support System" for the Homelab (Edge Services)
+
+### 🐳 Core Services Stack (Docker LXC)
+This node runs `core` Docker Compose stacks isolated from the main Swarm, ensuring autonomy.
+* **Traefik (Edge):** Independent Reverse Proxy with Let's Encrypt (DNS Challenge) for secure local access.
+* **Authentik:** Centralized Identity Provider (IDP) & SSO protecting all core services.
+* **Uptime Kuma:** External monitoring of PVE1, WAN availability, and critical paths.
+* **Gotify + Apprise:** Centralized Notification Hub (push alerts via local/Tailscale).
+* **Portainer:** Local container management UI.
+* **Dozzle:** Real-time log viewer for debugging startup issues without SSH.
+* **Homepage:** A lightweight, fast dashboard acting as the central landing page for the core infrastructure.
+* **Tailscale (LXC):** Emergency remote access gateway & Subnet Router (running in a separate LXC container).
+* **AdGuard Home (LXC):** Secondary DNS server ensuring internet resolution during PVE1 maintenance (running in a separate LXC container).
+
 
 ***
 
