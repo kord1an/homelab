@@ -15,17 +15,20 @@ Documentation and Infrastructure as Code for my home lab environment focused on 
 - **Virtualization:** Proxmox VE
 - **OS:** Debian/Ubuntu (VMs)
 - **Orchestration:** Docker Swarm (multi-node)
-- **Storage:** NFS on ZFS (shared across nodes)
+- **Storage:** ZFS pools
 - **Reverse Proxy:** Traefik
 - **Automation:** Ansible (work in progress)
 
 ## 🚧 Project Status
 
-Currently migrating services to Docker Swarm:
-- Services are scattered across Proxmox hosts and individual VMs
-- Goal: unified multi-node Swarm environment with shared NFS storage
-- Building Ansible automation in parallel
+Currently in the active phase of migrating from standalone LXC containers to a tiered Docker architecture:
+
+- **Phase 1 (Complete):** Established "Guardian Node" (PVE2) running critical core services (DNS, Auth, Monitoring) in an independent Docker environment.
+- **Phase 2 (In Progress):** Constructing the High-Availability Cluster (PVE1 + PVE2) and migrating main applications to Docker Swarm.
+- **Current State:** Services are transitioning from legacy LXC/VMs to the new architecture. Shared NFS storage (ZFS-backed) is configured.
+- **Next Steps:** Finalizing Authentik SSO integration and deploying the primary application stack (Media, Home Automation) to Swarm.
+- **Automation:** Ansible playbooks are being developed in parallel to standardize configuration across nodes.
 
 ---
 
-**Last update:** 2025-12-12
+**Last update:** 2026-02-01
