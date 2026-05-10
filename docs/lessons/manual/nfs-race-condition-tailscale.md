@@ -1,6 +1,7 @@
 # Incident: NFS mount instability on Swarm nodes upon boot
 
 ## Date
+
 2025-12-13
 
 ## Context

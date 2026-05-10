@@ -13,6 +13,7 @@ returns `login_required`. PVE does not handle this response correctly and loops
 instead of redirecting to the login page.
 
 Confirmed in Authentik logs — look for this combination:
+
 ```json
 "prompt": "none"
 "status": 302
@@ -20,16 +21,19 @@ Confirmed in Authentik logs — look for this combination:
 ```
 
 **Fix:** Change `prompt` value in PVE realm config from `none` to `login`:
+
 ```bash
 pveum realm modify authentik --prompt login
 ```
 
 Verify the change:
+
 ```bash
 cat /etc/pve/domains.cfg
 ```
 
 Expected result in `domains.cfg`:
+
 ```
 openid: authentik
     prompt login
@@ -43,6 +47,7 @@ is the correct value for standard SSO setups.
 ## Authentik Log Signals to Watch
 
 When debugging PVE → Authentik SSO issues, filter logs with:
+
 ```bash
 docker logs authentik-server --tail 100 2>&1 | grep -i "login_required\|prompt\|pve"
 ```
