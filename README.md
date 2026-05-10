@@ -1,96 +1,34 @@
-# Homelab Lab
+# Homelab
 
-A curated collection of architecture notes, infrastructure patterns and operational lessons from my personal homelab.
+A structured infrastructure knowledge base documenting my personal homelab system.
 
-This repository focuses on:
-- infrastructure design decisions
-- Docker Swarm experiments
-- edge/core/lab separation
-- Ansible automation patterns
-- networking and storage concepts
-- operational lessons learned
-
-Production deployments, sensitive configuration and day-to-day operational state remain private.
+It focuses on infrastructure design, automation patterns, and operational learnings rather than production deployments.
 
 ---
 
-## Architecture Philosophy
+## What this repository contains
 
-The homelab is separated into three logical layers:
-
-### Edge / Core Infrastructure
-Always-on infrastructure responsible for routing, authentication and operational visibility.
-
-Examples:
-- Traefik
-- Authentik
-- Uptime Kuma
-- Dozzle
-
-### Workloads
-User-facing and household services running primarily on standalone Docker hosts.
-
-Examples:
-- media services
-- game servers
-- personal applications
-
-### Lab / Experiments
-Infrastructure used for experimentation, orchestration learning and architectural testing.
-
-Examples:
-- Docker Swarm
-- automation experiments
-- GPU scheduling
-- networking tests
+- Architecture design and system topology
+- Architectural Decision Records (ADRs)
+- Operational runbooks
+- Infrastructure patterns and examples
+- Technical lessons learned from real usage
 
 ---
 
-## Goals
+## System overview
 
-This repository is not intended to be:
-- a full production dump
-- a copy of the live environment
-- a turnkey deployment
+The homelab is organized into three logical layers:
 
-Instead, it documents:
-- architectural decisions
-- reusable infrastructure patterns
-- operational lessons
-- tradeoffs and experiments
+- **Core Infrastructure** – routing, authentication, observability
+- **Workloads** – services and applications
+- **Lab Environment** – experiments and infrastructure testing
 
 ---
 
-## Repository Structure
+## Repository structure
 
 ```text
-docs/       Architecture notes, ADRs, lessons learned
-examples/   Isolated infrastructure examples
-diagrams/   Draw.io/Excalidraw diagrams and topology sketches
-```
-
----
-
-## Topics
-
-- Docker
-- Docker Swarm
-- Ansible
-- Traefik
-- Proxmox
-- ZFS
-- Networking
-- Self-hosting
-- Infrastructure as Code
-
----
-
-## Why This Repository Exists
-
-The goal of this repository is to document infrastructure thinking rather than expose a full live environment.
-
-It serves as:
-- a technical notebook
-- an architecture journal
-- a collection of reusable infrastructure patterns
-- a long-term learning archive
+docs/       Architecture, ADRs, runbooks, lessons
+examples/   Reusable infrastructure patterns
+diagrams/   System topology and architecture diagrams

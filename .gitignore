@@ -1,0 +1,9 @@
+*.log
+.env
+.env.*
+*.key
+*.pem
+*.pub
+*.retry
+.vscode/
+homepage/config/logs/
