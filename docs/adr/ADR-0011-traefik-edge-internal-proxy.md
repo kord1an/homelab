@@ -32,3 +32,11 @@ Deploy **two separate Traefik instances**:
 ## Related
 
 - `docs/runbooks/ansible/traefik-orchestration-deploy.md`
+
+
+## Superseded By
+ADR-0015: traefik-kop + Redis for multi-host service discovery
+
+Internal Traefik removed from Swarm. Edge Traefik handles all routing
+via kop-based discovery. Docker socket security concern remains valid
+and is addressed in ADR-0015.
